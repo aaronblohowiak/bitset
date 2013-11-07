@@ -48,7 +48,7 @@ type bitSet struct {
 	bits []byte
 }
 
-//create a new BitSet and return it.
+//create a new BitSet and return it. size is number of BITS.
 //The bitset's backing array is allocated immediately.
 func New(size uint) BitSet {
 	byteLength := int(math.Ceil(float64(size) / 8.0))
