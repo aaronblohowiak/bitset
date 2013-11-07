@@ -137,6 +137,37 @@ func TestAnd(t *testing.T) {
 
 }
 
+func TestPopCount(t *testing.T) {
+	b := New(100)
+	b.Set(14)
+	b.Set(25)
+	b.Set(27)
+	b.Set(30)
+	b.Set(31)
+
+	allocs := testing.AllocsPerRun(100, func() {
+		b.PopCount()
+	})
+
+	if allocs != 0 {
+		t.Error("Should NOT allocate", allocs)
+	}
+
+	if b.PopCount() != 5 {
+		t.Error("PopCount was not correct: ", b.PopCount())
+	}
+
+	b2 := New(100)
+
+	for i := 0; i < 100; i++ {
+		b2.Set(uint(i))
+		if b2.PopCount() != i+1 {
+			t.Error("PopCount was not correct: ", b2.PopCount(), i)
+		}
+	}
+
+}
+
 func randomIndexes(b *testing.B, size uint) []uint {
 	r := rand.New(rand.NewSource(0))
 	indexes := make([]uint, 0, b.N)

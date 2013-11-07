@@ -34,6 +34,9 @@ type BitSet interface {
 	// a = b
 	CopyFrom(b BitSet)
 
+	// Returns the number of bits set to 1.  The runtime of this call is currently equal to the number of bits set to 1.
+	PopCount() int
+
 	//zero-copy []byte access
 	Bytes() []byte
 
@@ -103,6 +106,18 @@ func (b *bitSet) Zero() {
 	for i, _ := range b.bits {
 		b.bits[i] = 0
 	}
+}
+
+func (b *bitSet) PopCount() int {
+	total := 0
+
+	for _, x := range b.bits {
+		for ; x > 0; total++ {
+			x &= x - 1
+		}
+	}
+
+	return int(total)
 }
 
 //Get the bytes that represent this BitSet. Does not allocate.
